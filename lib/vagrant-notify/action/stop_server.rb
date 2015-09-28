@@ -16,7 +16,12 @@ module Vagrant
 
           pid = env[:notify_data][:pid]
 
-          Process.kill('KILL', pid.to_i) rescue nil
+          begin
+            Process.kill('KILL', pid.to_i)
+            puts "Stopped vagrant-notify-server pid: #{pid}"
+          rescue
+            nil
+          end
 
           env[:notify_data][:pid]  = nil
           env[:notify_data][:port] = nil

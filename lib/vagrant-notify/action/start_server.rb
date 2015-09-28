@@ -1,6 +1,5 @@
 require "vagrant/util/is_port_open"
 
-require_relative '../server'
 
 module Vagrant
   module Notify
@@ -16,8 +15,14 @@ module Vagrant
           @env = env
 
           port = next_available_port
-          env[:notify_data][:pid]  = Server.run(env, port)
+          id = env[:machine].id
+          dir = File.expand_path('../../', __FILE__)
+          
+          env[:notify_data][:pid]  = Process.spawn("ruby #{dir}/server.rb #{id} #{port}")
           env[:notify_data][:port] = port
+
+          puts "Started vagrant-notify-server pid: #{env[:notify_data][:pid]}"
+          sleep 5
 
           @app.call env
         end
