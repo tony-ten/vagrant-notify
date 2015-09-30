@@ -1,3 +1,6 @@
+
+require_relative 'windows/process_kill'
+
 module Vagrant
   module Notify
     module Action
@@ -17,8 +20,13 @@ module Vagrant
           pid = env[:notify_data][:pid]
 
           begin
-            Process.kill('KILL', pid.to_i)
-            puts "Stopped vagrant-notify-server pid: #{pid}"
+            if RUBY_PLATFORM =~ /mswin|msys|mingw|cygwin|bccwin|wince|emc/
+              Vagrant::Notify::Action::Windows::ProcessKill.kill_win_proc(pid)
+            else
+              Process.kill('KILL', pid.to_i)
+              msg = Vagrant::UI::Basic.new()
+              msg.say(@stdout, "Stopped vagrant-notify-server pid: #{pid}")
+            end
           rescue
             nil
           end

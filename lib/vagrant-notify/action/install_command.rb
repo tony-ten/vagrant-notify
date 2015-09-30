@@ -29,6 +29,9 @@ module Vagrant
           env[:machine].communicate.upload(source.to_s, '/tmp/notify-send')
           env[:machine].communicate.sudo('mv /usr/bin/{notify-send,notify-send.bkp}; exit 0')
           env[:machine].communicate.sudo('mv /tmp/notify-send /usr/bin/notify-send && chmod +x /usr/bin/notify-send')
+          if RUBY_PLATFORM =~ /mswin|msys|mingw|cygwin|bccwin|wince|emc/
+            env[:machine].communicate.sudo("sed 's/\r\$//' -i /usr/bin/notify-send") # dos2unix
+          end
         end
       end
     end

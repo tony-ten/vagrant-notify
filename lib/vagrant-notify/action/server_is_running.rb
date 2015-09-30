@@ -21,7 +21,7 @@ module Vagrant
 
         def valid_process?(pid)
           if RUBY_PLATFORM =~ /mswin|msys|mingw|cygwin|bccwin|wince|emc/
-            ProcessInfo.queryProcess(pid) if pid
+            Vagrant::Notify::Action::Windows::ProcessInfo.queryProcess(pid) if pid
           else
             Process.getpgid(pid.to_i) if pid
           end

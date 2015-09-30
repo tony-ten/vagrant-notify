@@ -42,7 +42,12 @@ module Vagrant
           client.puts HTTP_RESPONSE
         else
           fix_icon_path!(args)
-          system("notify-send #{args}")
+          if RUBY_PLATFORM =~ /mswin|msys|mingw|cygwin|bccwin|wince|emc/
+            notify_send = ENV["notify_send"]
+            system("ruby #{notify_send} #{args}")
+          else
+            system("notify-send #{args}")
+          end
         end
         client.close
       rescue => ex

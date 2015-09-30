@@ -21,7 +21,8 @@ module Vagrant
           env[:notify_data][:pid]  = Process.spawn("ruby #{dir}/server.rb #{id} #{port}")
           env[:notify_data][:port] = port
 
-          puts "Started vagrant-notify-server pid: #{env[:notify_data][:pid]}"
+          msg = Vagrant::UI::Basic.new()
+          msg.say(@stdout, "Started vagrant-notify-server pid: #{env[:notify_data][:pid]}")
           sleep 5
 
           @app.call env
