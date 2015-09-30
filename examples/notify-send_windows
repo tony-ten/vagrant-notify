@@ -1,0 +1,8 @@
+
+# Example MS-Windows notify-send wrapper script.
+# MS-Windows Caveats:
+#  - notify_send environemnt variable must be set to point to the wrapper script.
+#  - Wrapper script must be a ruby file.
+
+
+system("\"c\:\/Users\/IEUser\/bin\/growlnotify.exe\" \"#{ARGV.join(' ')}\"")
