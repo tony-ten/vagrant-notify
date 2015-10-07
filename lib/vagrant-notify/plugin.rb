@@ -54,6 +54,11 @@ module Vagrant
         require_relative './action'
         hook.before VagrantPlugins::ProviderVirtualBox::Action::Suspend, Vagrant::Notify::Action.action_stop_server
       end
+
+      command(:notify) do
+        require_relative 'command'
+        Vagrant::Notify::Command
+      end
     end
   end
 end

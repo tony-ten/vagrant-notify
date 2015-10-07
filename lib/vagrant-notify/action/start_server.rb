@@ -14,16 +14,20 @@ module Vagrant
         def call(env)
           @env = env
 
+          msg = Vagrant::UI::Colored.new
           port = next_available_port
           id = env[:machine].id
           dir = File.expand_path('../../', __FILE__)
-          
-          env[:notify_data][:pid]  = Process.spawn("ruby #{dir}/server.rb #{id} #{port}")
-          env[:notify_data][:port] = port
 
-          msg = Vagrant::UI::Basic.new()
-          msg.say(@stdout, "Started vagrant-notify-server pid: #{env[:notify_data][:pid]}")
-          sleep 5
+          if which('ruby')
+            env[:notify_data][:pid]  = Process.spawn("ruby #{dir}/server.rb #{id} #{port}")
+            env[:notify_data][:port] = port
+
+            msg.say(:success, "Started vagrant-notify-server pid: #{env[:notify_data][:pid]}")
+            sleep 5
+          else
+            msg.say(:error, "Unable to spawn TCPServer daemon, ruby not found in $PATH")
+          end
 
           @app.call env
         end
@@ -61,6 +65,20 @@ module Vagrant
 
             yield options
           end
+        end
+
+        # http://stackoverflow.com/questions/2108727/which-in-ruby-checking-if-program-exists-in-path-from-ruby
+        # Cross-platform way of finding an executable in the $PATH.
+        #   which('ruby') #=> /usr/bin/ruby
+        def which(cmd)
+          exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
+          ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
+            exts.each { |ext|
+              exe = File.join(path, "#{cmd}#{ext}")
+              return exe if File.executable?(exe) && !File.directory?(exe)
+            }
+          end
+          return nil
         end
       end
     end

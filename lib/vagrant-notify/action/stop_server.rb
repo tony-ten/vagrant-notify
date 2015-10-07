@@ -24,8 +24,8 @@ module Vagrant
               Vagrant::Notify::Action::Windows::ProcessKill.kill_win_proc(pid)
             else
               Process.kill('KILL', pid.to_i)
-              msg = Vagrant::UI::Basic.new()
-              msg.say(@stdout, "Stopped vagrant-notify-server pid: #{pid}")
+              msg = Vagrant::UI::Colored.new
+              msg.say(:success, "Stopped vagrant-notify-server pid: #{pid}")
             end
           rescue
             nil
