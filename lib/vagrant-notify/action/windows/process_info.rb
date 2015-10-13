@@ -6,7 +6,7 @@ module Vagrant
         class ProcessInfo
           def self.queryProcess(pid)
             return false unless pid =~ /\A\d+\z/
-            result = `wmic process where \"ProcessID = '#{pid}'\" get ProcessID,Commandline /format:list 2>nul`
+            result = `c\:/Windows/System32/wbem/WMIC.exe process where \"ProcessID = '#{pid}'\" get ProcessID,Commandline /format:list 2>nul`
             querypid = false
             result.split(/\r?\n/).each do |line|
               next if line =~ /^\s*$/

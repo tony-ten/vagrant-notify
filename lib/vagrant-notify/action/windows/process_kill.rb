@@ -7,7 +7,7 @@ module Vagrant
       module Windows
         class ProcessKill
           def self.kill_win_proc(pid)
-            cmd = "tskill #{pid}"
+            cmd = "c\:/Windows/System32/tskill.exe #{pid}"
             msg = Vagrant::UI::Colored.new
 
             Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
