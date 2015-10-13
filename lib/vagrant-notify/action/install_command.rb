@@ -7,7 +7,15 @@ module Vagrant
         end
 
         def call(env)
-          path = compile_command(env)
+          case RUBY_PLATFORM
+          when /mswin|msys|mingw|cygwin|bccwin|wince|emc/
+            path = compile_command(env, 'notify-send-windows.erb')
+          when /darwin|mac os/
+            path = compile_command(env, 'notify-send-osx.erb')
+          else
+            path = compile_command(env, 'notify-send.erb')
+          end
+
           install_command_on_guest(env, path)
 
           @app.call env
@@ -15,10 +23,10 @@ module Vagrant
 
         private
 
-        def compile_command(env)
+        def compile_command(env, template_file)
           host_port        = env[:notify_data][:port]
           template_binding = OpenStruct.new(:host_port => host_port, :shared_folder => '/tmp/vagrant-notify')
-          command_template = ERB.new(Vagrant::Notify.files_path.join('notify-send.erb').read)
+          command_template = ERB.new(Vagrant::Notify.files_path.join(template_file).read)
           command          = command_template.result(template_binding.instance_eval { binding })
 
           env[:tmp_path].join('vagrant-notify-send').open('w') { |f| f.write(command) }
