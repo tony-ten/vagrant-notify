@@ -1,5 +1,0 @@
-#!/bin/bash
-# Example *nix notify-send wrapper script.
-
-message="$*"
-terminal-notifier -sound default -message "\\$message"
