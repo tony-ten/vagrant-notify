@@ -54,8 +54,6 @@ module Vagrant
         end
 
         def action_status_server
-          # Need to create a Vagrant::UI::Colored wrapper
-          msg = Vagrant::UI::Colored.new
           Vagrant::Action::Builder.new.tap do |b|
             b.use Call, CheckProvider do |env, b2|
               next if !env[:result]
@@ -63,9 +61,9 @@ module Vagrant
               b2.use PrepareData
               b2.use Call, ServerIsRunning do |env2, b3|
                 if env2[:result]
-                  msg.say(:success, "vagrant-notify-server pid: #{env2[:notify_data][:pid]}")
+                  env.ui.success("vagrant-notify-server pid: #{env2[:notify_data][:pid]}")
                 else
-                  msg.say(:error, "No vagrant-notify server detected.")
+                  env.ui.error("No vagrant-notify server detected.")
                 end
               end
             end

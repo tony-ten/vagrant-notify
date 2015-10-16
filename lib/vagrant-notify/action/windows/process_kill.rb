@@ -6,16 +6,15 @@ module Vagrant
     module Action
       module Windows
         class ProcessKill
-          def self.kill_win_proc(pid)
+          def self.kill_win_proc(pid, env)
             cmd = "c\:/Windows/System32/tskill.exe #{pid}"
-            msg = Vagrant::UI::Colored.new
 
             Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
               exit_status = wait_thr.value
               if exit_status.exitstatus == 0
-                msg.say(:success, "Stopped vagrant-notify-server pid: #{pid}")
+                env[:machine].ui.success("Stopped vagrant-notify-server pid: #{pid}")
               else
-                msg.say(:error, "Failed to kill vagrant-notify-server pid: #{pid}")
+                env[:machine].ui.error("Failed to kill vagrant-notify-server pid: #{pid}")
               end
             end
           end
