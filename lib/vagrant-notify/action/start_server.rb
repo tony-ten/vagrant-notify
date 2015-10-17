@@ -14,7 +14,6 @@ module Vagrant
         def call(env)
           @env = env
 
-          msg = Vagrant::UI::Colored.new
           port = next_available_port
           id = env[:machine].id
           dir = File.expand_path('../../', __FILE__)
@@ -23,10 +22,10 @@ module Vagrant
             env[:notify_data][:pid]  = Process.spawn("ruby #{dir}/server.rb #{id} #{port}")
             env[:notify_data][:port] = port
 
-            msg.say(:success, "Started vagrant-notify-server pid: #{env[:notify_data][:pid]}")
+            env[:machine].ui.success("Started vagrant-notify-server pid: #{env[:notify_data][:pid]}")
             sleep 5
           else
-            msg.say(:error, "Unable to spawn TCPServer daemon, ruby not found in $PATH")
+            env[:machine].ui.error("Unable to spawn TCPServer daemon, ruby not found in $PATH")
           end
 
           @app.call env
