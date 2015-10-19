@@ -61,9 +61,9 @@ module Vagrant
               b2.use PrepareData
               b2.use Call, ServerIsRunning do |env2, b3|
                 if env2[:result]
-                  env.ui.success("vagrant-notify-server pid: #{env2[:notify_data][:pid]}")
+                  env[:machine].ui.success("vagrant-notify-server pid: #{env2[:notify_data][:pid]}")
                 else
-                  env.ui.error("No vagrant-notify server detected.")
+                  env[:machine].ui.error("No vagrant-notify server detected.")
                 end
               end
             end
