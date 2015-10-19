@@ -2,7 +2,7 @@
 
 # Example MS-Windows notify-send wrapper script.
 # MS-Windows Caveats:
-#  - notify_send environemnt variable must be set to point to the wrapper script.
+#  - NOTIFY_SEND environemnt variable must be set to point to the wrapper script.
 #  - Wrapper script must be a ruby file.
 
 

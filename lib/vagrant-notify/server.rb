@@ -43,8 +43,12 @@ module Vagrant
         else
           fix_icon_path!(args)
           if RUBY_PLATFORM =~ /mswin|msys|mingw|cygwin|bccwin|wince|emc/
-            notify_send = ENV["notify_send"]
-            system("ruby #{notify_send} #{args}")
+            notify_send = ENV["NOTIFY_SEND"]
+            if notify_send.nil?
+              log "NOTIFY_SEND environment variable is not set."
+            else
+              system("ruby #{notify_send} #{args}")
+            end
           else
             system("notify-send #{args}")
           end
