@@ -10,7 +10,7 @@ module Vagrant
       end
 
       def execute
-      options = {}
+        options = {}
         opts = OptionParser.new do |o|
           o.banner = 'Usage: vagrant notify'
           o.separator ''
