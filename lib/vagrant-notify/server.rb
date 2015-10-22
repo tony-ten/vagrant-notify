@@ -15,18 +15,18 @@ module Vagrant
         tcp_server = TCPServer.open("127.0.0.1", port)
         server = self.new(id, machine_name, provider)
 
-        # Have to wrap this in a begin/rescue block so we can be certain the server is running at all times. 
+        # Have to wrap this in a begin/rescue block so we can be certain the server is running at all times.
+        begin 
           loop {
                 Thread.start(tcp_server.accept) { |client|
-                  Thread.handle_interrupt(Interrupt => :never) {
-                    begin
-                      server.receive_data(client)
-                    rescue 
-                      retry
-                    end
+                  Thread.handle_interrupt(Interrupt => :never) {  
+                  server.receive_data(client)
                   }
               }
             }
+        rescue
+          retry
+        end
           
       end
 
