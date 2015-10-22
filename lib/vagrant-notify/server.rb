@@ -24,7 +24,7 @@ module Vagrant
                   }
               }
             }
-        rescue
+        rescue Interrupt
           retry
         end
           
