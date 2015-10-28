@@ -13,4 +13,4 @@ else
   message = ARGV.map{|a| a =~ /-(title|message)/ ? a : "'\\#{a}'"}.join(' ')
 end
 
-system("terminal-notifier -sound default #{message}")
+system("terminal-notifier -sound default -open \"http://localhost:7082/\" #{message}")
